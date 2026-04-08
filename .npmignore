@@ -1,6 +1,9 @@
-*
-!dist/
-!dist/**
-!package.json
-!README.md
-!LICENSE
+src/
+test/
+.git/
+.gitignore
+.npmrc
+*.cmd
+tsconfig.json
+tsup.config.ts
+Dockerfile
