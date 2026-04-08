@@ -34,7 +34,7 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "tiktak": {
       "command": "npx",
-      "args": ["-y", "tiktak-mcp-server"],
+      "args": ["-y", "github:ideaCompany/tiktak-mcp-server"],
       "env": {
         "TIKTAK_API_KEY": "tk_your_api_key_here"
       }
@@ -46,7 +46,7 @@ Add to your `claude_desktop_config.json`:
 ### Claude Code (CLI)
 
 ```bash
-claude mcp add tiktak -- npx -y tiktak-mcp-server
+claude mcp add tiktak -- npx -y github:ideaCompany/tiktak-mcp-server
 ```
 
 Then set `TIKTAK_API_KEY` in your environment.
@@ -65,17 +65,10 @@ Use the same stdio pattern:
 }
 ```
 
-### Global Install
+### Direct from GitHub
 
 ```bash
-npm install -g tiktak-mcp-server
-tiktak-mcp-server
-```
-
-### Docker
-
-```bash
-docker run -e TIKTAK_API_KEY=tk_your_key tiktak-mcp-server
+npx github:ideaCompany/tiktak-mcp-server
 ```
 
 ## Environment Variables
