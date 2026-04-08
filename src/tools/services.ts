@@ -57,6 +57,39 @@ export function registerServiceTools(server: McpServer, api: TikTakApiClient) {
   );
 
   server.tool(
+    "create_services_bulk",
+    "Create multiple services at once. Useful for setting up a new account. Each service is created independently; failures for one do not block others.",
+    {
+      services: z.array(z.object({
+        name: z.string(),
+        type: z.enum(["BillableTime", "BillableFixed"]).optional(),
+        hourlyRate: z.number().optional(),
+        fixedAmount: z.number().optional(),
+        description: z.string().optional(),
+        rounding: z.enum(["None", "FiveMinutes", "FifteenMinutes", "ThirtyMinutes"]).optional(),
+        sortOrder: z.number().optional(),
+      })).describe("Array of services to create"),
+    },
+    async ({ services }) => {
+      const created: ServiceResponse[] = [];
+      const failed: { index: number; name: string; error: string }[] = [];
+
+      for (let i = 0; i < services.length; i++) {
+        try {
+          const service = await api.post<ServiceResponse>("/api/services", services[i]);
+          created.push(service);
+        } catch (e) {
+          const msg = e instanceof TikTakApiError ? e.message : String(e);
+          failed.push({ index: i, name: services[i].name, error: msg });
+        }
+      }
+
+      const result = { created: created.length, failed: failed.length, createdServices: created, failures: failed };
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    },
+  );
+
+  server.tool(
     "update_service",
     "Update an existing service definition.",
     {
